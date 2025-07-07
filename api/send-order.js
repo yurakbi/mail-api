@@ -13,7 +13,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { name, email, phone, address, comment } = req.body;
+  // Додаємо всі потрібні поля
+  const { name, surname, email, phone, address, comment, productName, price, color, size, quantity } = req.body;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -28,7 +29,18 @@ export default async function handler(req, res) {
       from: process.env.EMAIL_USER,
       to: process.env.ADMIN_EMAIL,
       subject: "Нове замовлення",
-      text: `Ім'я: ${name}\nEmail: ${email}\nТелефон: ${phone}\nАдреса: ${address}\nКоментар: ${comment}`,
+      text: 
+        `Ім'я: ${name}\n` +
+        `Прізвище: ${surname}\n` +
+        `Email: ${email}\n` +
+        `Телефон: ${phone}\n` +
+        `Адреса: ${address}\n` +
+        `Товар: ${productName}\n` +
+        `Ціна: ${price}\n` +
+        `Колір: ${color}\n` +
+        `Розмір: ${size}\n` +
+        `Кількість: ${quantity}\n` +
+        (comment ? `Коментар: ${comment}\n` : '')
     });
     res.status(200).json({ message: "Лист відправлено!" });
   } catch (error) {
